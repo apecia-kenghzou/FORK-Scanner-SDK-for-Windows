@@ -305,7 +305,7 @@ namespace Scanner_SDK_Sample_Application
         /// <returns>Status of the last RFID operation</returns>
         private int WriteTag(string tagID, RfidBank rfidBank, string rfidData, int offset, string password)
         {
-            if (String.IsNullOrEmpty(tagID) || String.IsNullOrEmpty(rfidData))
+            if ( String.IsNullOrEmpty(rfidData)) //String.IsNullOrEmpty(tagID) ||
             {
                 throw new ArgumentException(INCORRECT_ARGUMENT);
             }
@@ -909,6 +909,7 @@ namespace Scanner_SDK_Sample_Application
                     var ismatch = nonePrintable.IsMatch(userBankHex);
                     try
                     {
+                        
                         userBankASCII = ismatch ? "Unable to decode ASCII." : GetReadableScanDataLabel(userBankHex);
                     }
                     catch

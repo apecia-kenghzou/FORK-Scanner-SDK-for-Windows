@@ -2399,5 +2399,20 @@ namespace Scanner_SDK_Sample_Application
             ExecCmd(opcode, ref inXML, out outXml, out status);
             DisplayResult(status, "ERASE_ELECTRIC_FENCE_CUSTOM_TONE");
         }
+
+        private void txtUpcaBarcode_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtBarcode_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNewEpcId_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     } 
 }

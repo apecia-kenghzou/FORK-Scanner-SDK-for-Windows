@@ -444,6 +444,7 @@ namespace Scanner_SDK_Sample_Application
             this.txtBarcode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtBarcode.Size = new System.Drawing.Size(468, 248);
             this.txtBarcode.TabIndex = 0;
+            this.txtBarcode.TextChanged += new System.EventHandler(this.txtBarcode_TextChanged);
             // 
             // grpboxBarcodeLbl
             // 
@@ -2343,10 +2344,10 @@ namespace Scanner_SDK_Sample_Application
             this.txtNewEpcId.Location = new System.Drawing.Point(94, 80);
             this.txtNewEpcId.Margin = new System.Windows.Forms.Padding(2);
             this.txtNewEpcId.Name = "txtNewEpcId";
-            this.txtNewEpcId.ReadOnly = true;
             this.txtNewEpcId.Size = new System.Drawing.Size(193, 20);
             this.txtNewEpcId.TabIndex = 1;
             this.toolTip1.SetToolTip(this.txtNewEpcId, "SGTIN 96 encoded");
+            this.txtNewEpcId.TextChanged += new System.EventHandler(this.txtNewEpcId_TextChanged);
             // 
             // lblUserBank
             // 
@@ -2367,6 +2368,7 @@ namespace Scanner_SDK_Sample_Application
             this.txtUpcaBarcode.ReadOnly = true;
             this.txtUpcaBarcode.Size = new System.Drawing.Size(193, 20);
             this.txtUpcaBarcode.TabIndex = 0;
+            this.txtUpcaBarcode.TextChanged += new System.EventHandler(this.txtUpcaBarcode_TextChanged);
             // 
             // label25
             // 

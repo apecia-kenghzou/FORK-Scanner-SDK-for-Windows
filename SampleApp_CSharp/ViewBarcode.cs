@@ -10,6 +10,7 @@ using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
 using CoreScanner;
+using System.Globalization;
 
 namespace Scanner_SDK_Sample_Application
 {
@@ -18,6 +19,7 @@ namespace Scanner_SDK_Sample_Application
         /// <summary>
         /// Flush Macro PDF
         /// </summary>
+        private string tempbarcode = "";
         private void PerformBtnFlushMacroPdfClick(object sender, EventArgs e)
         {
             if (IsScannerConnected())
@@ -318,7 +320,10 @@ namespace Scanner_SDK_Sample_Application
                 txtBarcodeLbl.Invoke(new MethodInvoker(delegate
                 {
                     txtBarcodeLbl.Clear();
+                    System.Diagnostics.Debug.WriteLine(strData);
                     txtBarcodeLbl.Text = strData;
+                  
+
                 }));
             }
 
@@ -328,6 +333,10 @@ namespace Scanner_SDK_Sample_Application
                 {
                     txtSyblogy.Text = GetSymbology((int)Convert.ToInt32(symbology));
                 }));
+            }
+            if (txtSyblogy.Text== "PDF-417")
+            {
+                tempbarcode = strData;
             }
         }
 
@@ -351,10 +360,35 @@ namespace Scanner_SDK_Sample_Application
                     txtBarcode.Invoke(new MethodInvoker(delegate
                     {
                         txtBarcode.Text = IndentXmlString(tmpScanData);
+               
+                     
+                        System.Diagnostics.Debug.WriteLine(IndentXmlString(tmpScanData));
+                      
                     }));
                 }
+                if (GetScanDataType(tmpScanData) == ST_EPC_RAW)
+                {
+                    currentEpcId = GetScanDataLabel(tmpScanData);
+                    currentEpcId = GetReadableScanDataLabel(currentEpcId);
+                    
+                    string newepc = BoardingPassMassager(tempbarcode); 
+                    System.Diagnostics.Debug.WriteLine(currentEpcId);
+                    System.Diagnostics.Debug.WriteLine(newepc);
+                    var status = WriteTag(currentEpcId, RfidBank.Epc, newepc, 2, "00");
+                    if (status == STATUS_SUCCESS)
+                    {
+                        System.Diagnostics.Debug.WriteLine("WRITE SUCCESS");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("WRITE FAIL");
+                    }
+                    //SetTextboxText(txtEpcId, currentEpcId);
 
-                if(GetSelectedTabName().Equals(SSW_TAB_NAME))
+                    ExtractEpcData();
+                }
+
+                if (GetSelectedTabName().Equals(SSW_TAB_NAME))
                 {
                     if (GetScanDataType(tmpScanData) == ST_UPCA)
                     {
@@ -368,6 +402,7 @@ namespace Scanner_SDK_Sample_Application
                     {
                         currentEpcId = GetScanDataLabel(tmpScanData);
                         currentEpcId = GetReadableScanDataLabel(currentEpcId);
+
                         SetTextboxText(txtEpcId, currentEpcId);
 
                         ExtractEpcData();
@@ -380,7 +415,59 @@ namespace Scanner_SDK_Sample_Application
                 UpdateResults("Failed to scan data  "+e.Message);
             }
         }
+        private static string BoardingPassMassager(string s)
+        {
+            System.Diagnostics.Debug.WriteLine(s);
+            string ss_name = s.Substring(2, 19);
+            System.Diagnostics.Debug.WriteLine(ss_name);
+            string ss_pnr = s.Substring(23, 6);
+            System.Diagnostics.Debug.WriteLine(ss_pnr);
+            string ss_flight = s.Substring(30, 8);
+            System.Diagnostics.Debug.WriteLine(ss_flight);
+             string ss_no = s.Substring(39, 4);
+            //  string ss_date = s.Substring(44, 12);
+            // string date = null;
+            // int currentYear = DateTime.Now.Year;
+            // date = DecodeJulianDate(currentYear, int.Parse(ss_date.Substring(0, 3)));
+            // string seats = ss_date.Substring(4, 4);
+            //string seq = ss_date.Substring(8, 4);
+            //string[] name_part = ss_name.Split('/');
+            // string origin = ss_flight.Substring(0, 3);
+            // string dest = ss_flight.Substring(3, 3);
+            string flight_no = ss_flight.Substring(ss_flight.Length - 2) + ss_no;
+            System.Diagnostics.Debug.WriteLine(flight_no);
+            string result = StringToHex(ss_pnr + "" + flight_no);
+            System.Diagnostics.Debug.WriteLine(result);
+            return result;
+        }
+        public static string StringToHex(string input)
+        {
+            // Get byte array of the string
+            byte[] bytes = Encoding.UTF8.GetBytes(input);
 
+            // Initialize StringBuilder to store hexadecimal representation
+            StringBuilder hexString = new StringBuilder();
+
+            // Iterate over each byte and convert to hexadecimal
+            foreach (byte b in bytes)
+            {
+                // Convert byte to hexadecimal string
+                string hex = b.ToString("X2"); // X2 format specifier ensures two characters for each byte
+                                               // Append hexadecimal string to result
+                hexString.Append(hex);
+            }
+
+            // Return the hexadecimal representation
+            return hexString.ToString();
+        }
+        private static string DecodeJulianDate(int year, int dayOfYear)
+        {
+            // Construct DateTime object for January 1st of the specified year
+            DateTime january1st = new DateTime(year, 1, 1);
+            january1st = january1st.AddDays(dayOfYear - 1); // Subtract 1 because day of year is 1-indexed
+            string formattedDate = january1st.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture); // Example: "dd-MM-yyyy" for day-month-year format
+            return formattedDate;
+        }
         /// <summary>
         /// Get the selected tab name
         /// </summary>
@@ -411,7 +498,7 @@ namespace Scanner_SDK_Sample_Application
         {
             StringBuilder stringBuilder = new StringBuilder();
             string[] numbers = scanDataLabel.Split(' ');
-
+        
             foreach (string number in numbers)
             {
                 if (String.IsNullOrEmpty(number))
@@ -433,6 +520,7 @@ namespace Scanner_SDK_Sample_Application
         {
             try
             {
+               
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(scanDataXml);
                 return xmlDocument.DocumentElement.GetElementsByTagName("datalabel").Item(0).InnerText;

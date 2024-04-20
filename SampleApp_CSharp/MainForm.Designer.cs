@@ -255,6 +255,15 @@ namespace Scanner_SDK_Sample_Application
             this.openFileDialogWavFile = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialogDADF = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialogBarcodePath = new System.Windows.Forms.FolderBrowserDialog();
+            this.tabKeng = new System.Windows.Forms.TabPage();
+            this.grpboxKengLbl = new System.Windows.Forms.GroupBox();
+            this.lblPNRCde= new System.Windows.Forms.Label();
+            this.txtPNRLbl = new System.Windows.Forms.TextBox();
+            this.lblFLIGHTCde = new System.Windows.Forms.Label();
+            this.txtFLIGHTLbl = new System.Windows.Forms.TextBox();
+
+            this.lblWriteStatus = new System.Windows.Forms.Label();
+            this.writeStatusIcon = new System.Windows.Forms.PictureBox();
             this.tabCtrl.SuspendLayout();
             this.tabBarcode.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -310,6 +319,9 @@ namespace Scanner_SDK_Sample_Application
             this.grpGeneral.SuspendLayout();
             this.grpScanners.SuspendLayout();
             this.stStripResult.SuspendLayout();
+            this.tabKeng.SuspendLayout();
+
+            ((System.ComponentModel.ISupportInitialize)(this.writeStatusIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // tabCtrl
@@ -328,12 +340,31 @@ namespace Scanner_SDK_Sample_Application
             this.tabCtrl.Controls.Add(this.tabScale);
             this.tabCtrl.Controls.Add(this.tabSSW);
             this.tabCtrl.Controls.Add(this.tabXml);
+            this.tabCtrl.Controls.Add(this.tabKeng);
+
+           
             this.tabCtrl.Location = new System.Drawing.Point(473, 12);
             this.tabCtrl.Name = "tabCtrl";
-            this.tabCtrl.SelectedIndex = 0;
+            this.tabCtrl.SelectedIndex = 12;
             this.tabCtrl.Size = new System.Drawing.Size(519, 494);
             this.tabCtrl.TabIndex = 1;
             this.tabCtrl.SelectedIndexChanged += new System.EventHandler(this.tabCtrl_SelectedIndexChanged);
+            // 
+            // tabKeng
+            // 
+            this.tabKeng.AutoScroll = true;
+            this.tabKeng.BackColor = System.Drawing.Color.AliceBlue;
+            //this.tabKeng.Controls.Add(this.groupBox1);
+            //this.tabKeng.Controls.Add(this.grpBoxLanguage);
+                this.tabKeng.Controls.Add(this.grpboxKengLbl);
+            //this.tabKeng.Controls.Add(this.grpboxBarcodeLbl);
+            this.tabKeng.Location = new System.Drawing.Point(4, 22);
+            this.tabKeng.Name = "tabKeng";
+            this.tabKeng.Padding = new System.Windows.Forms.Padding(3);
+            this.tabKeng.Size = new System.Drawing.Size(511, 468);
+            this.tabKeng.TabIndex = 12;
+            this.tabKeng.Text = "Tab Keng";
+            this.tabKeng.UseVisualStyleBackColor = true;
             // 
             // tabBarcode
             // 
@@ -347,7 +378,7 @@ namespace Scanner_SDK_Sample_Application
             this.tabBarcode.Name = "tabBarcode";
             this.tabBarcode.Padding = new System.Windows.Forms.Padding(3);
             this.tabBarcode.Size = new System.Drawing.Size(511, 468);
-            this.tabBarcode.TabIndex = 0;
+            this.tabBarcode.TabIndex = 1;
             this.tabBarcode.Text = "Barcode";
             this.tabBarcode.UseVisualStyleBackColor = true;
             // 
@@ -445,6 +476,23 @@ namespace Scanner_SDK_Sample_Application
             this.txtBarcode.Size = new System.Drawing.Size(468, 248);
             this.txtBarcode.TabIndex = 0;
             this.txtBarcode.TextChanged += new System.EventHandler(this.txtBarcode_TextChanged);
+    
+            // 
+            // grpboxKengLbl
+            // 
+            this.grpboxKengLbl.BackColor = System.Drawing.SystemColors.Window;
+            this.grpboxKengLbl.Controls.Add(this.lblPNRCde);
+            this.grpboxKengLbl.Controls.Add(this.txtPNRLbl);
+            this.grpboxKengLbl.Controls.Add(this.lblFLIGHTCde);
+            this.grpboxKengLbl.Controls.Add(this.txtFLIGHTLbl);
+            this.grpboxKengLbl.Controls.Add(this.lblWriteStatus);
+            this.grpboxKengLbl.Controls.Add(this.writeStatusIcon);
+            this.grpboxKengLbl.Location = new System.Drawing.Point(19, 15);
+            this.grpboxKengLbl.Name = "grpboxBarcodeLbl";
+            this.grpboxKengLbl.Size = new System.Drawing.Size(468, 98);
+            this.grpboxKengLbl.TabIndex = 1;
+            this.grpboxKengLbl.TabStop = false;
+            this.grpboxKengLbl.Text = "Barcode Scanning";
             // 
             // grpboxBarcodeLbl
             // 
@@ -498,6 +546,61 @@ namespace Scanner_SDK_Sample_Application
             this.txtBarcodeLbl.Name = "txtBarcodeLbl";
             this.txtBarcodeLbl.Size = new System.Drawing.Size(331, 20);
             this.txtBarcodeLbl.TabIndex = 0;
+            // 
+            // lblPNRCde
+            // 
+            this.lblPNRCde.AutoSize = true;
+            this.lblPNRCde.Location = new System.Drawing.Point(11, 21);
+            this.lblPNRCde.Name = "lblPNRCde";
+            this.lblPNRCde.Size = new System.Drawing.Size(94, 13);
+            this.lblPNRCde.TabIndex = 0;
+            this.lblPNRCde.Text = "PNR";
+            // 
+            // txtPNRLbl
+            // 
+            this.txtPNRLbl.BackColor = System.Drawing.Color.White;
+            this.txtPNRLbl.Location = new System.Drawing.Point(121, 19);
+            this.txtPNRLbl.Name = "txtPNRLbl";
+            this.txtPNRLbl.Size = new System.Drawing.Size(331, 20);
+            this.txtPNRLbl.TabIndex = 0;
+            // 
+            // lblFLIGHTCde
+            // 
+            this.lblFLIGHTCde.AutoSize = true;
+            this.lblFLIGHTCde.Location = new System.Drawing.Point(11, 44);
+            this.lblFLIGHTCde.Name = "lblFLIGHTCde";
+            this.lblFLIGHTCde.Size = new System.Drawing.Size(94, 13);
+            this.lblFLIGHTCde.TabIndex = 0;
+            this.lblFLIGHTCde.Text = "FLight";
+            // 
+            // txtFLIGHTLbl
+            // 
+            this.txtFLIGHTLbl.BackColor = System.Drawing.Color.White;
+            this.txtFLIGHTLbl.Location = new System.Drawing.Point(121, 46);
+            this.txtFLIGHTLbl.Name = "txtFLIGHTLbl";
+            this.txtFLIGHTLbl.Size = new System.Drawing.Size(331, 20);
+            this.txtFLIGHTLbl.TabIndex = 0;
+            // 
+            // lblWriteStatus
+            // 
+            this.lblWriteStatus.AutoSize = true;
+            this.lblWriteStatus.Location = new System.Drawing.Point(11, 69);
+            this.lblWriteStatus.Name = "lblWriteStatus";
+            this.lblWriteStatus.Size = new System.Drawing.Size(94, 13);
+            this.lblWriteStatus.TabIndex = 0;
+            this.lblWriteStatus.Text = "Write Status";
+            // 
+            // writeStatusIcon
+            // 
+            this.writeStatusIcon.ErrorImage = null;
+            this.writeStatusIcon.InitialImage = null;
+            this.writeStatusIcon.Location = new System.Drawing.Point(121, 69);
+            this.writeStatusIcon.Margin = new System.Windows.Forms.Padding(2);
+            this.writeStatusIcon.Name = "statusIcon";
+            this.writeStatusIcon.Size = new System.Drawing.Size(17, 19);
+            this.writeStatusIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.writeStatusIcon.TabIndex = 23;
+            this.writeStatusIcon.TabStop = false;
             // 
             // btnAbortMacroPdf
             // 
@@ -2512,10 +2615,10 @@ namespace Scanner_SDK_Sample_Application
             // grpGeneral
             // 
             this.grpGeneral.Controls.Add(this.lblSlctScnnr);
-            this.grpGeneral.Controls.Add(this.grpTrigger);
+            //this.grpGeneral.Controls.Add(this.grpTrigger);
             this.grpGeneral.Controls.Add(this.combSlcrScnr);
             this.grpGeneral.Controls.Add(this.grpScanners);
-            this.grpGeneral.Controls.Add(this.btnGetScanners);
+           // this.grpGeneral.Controls.Add(this.btnGetScanners);
             this.grpGeneral.Location = new System.Drawing.Point(7, 12);
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Size = new System.Drawing.Size(460, 494);
@@ -3053,6 +3156,17 @@ namespace Scanner_SDK_Sample_Application
         private System.Windows.Forms.TextBox textBoxElectricFenceWaveFile;
         private System.Windows.Forms.Button buttonElectricFenceWavFileBrowse;
         private System.Windows.Forms.GroupBox grpElectricFenceCustomTone;
+        private System.Windows.Forms.TabPage tabKeng;
+        private System.Windows.Forms.GroupBox grpboxKengLbl;
+        private System.Windows.Forms.Label lblPNRCde;
+        private System.Windows.Forms.TextBox txtPNRLbl;
+        private System.Windows.Forms.Label lblFLIGHTCde;
+        private System.Windows.Forms.TextBox txtFLIGHTLbl;
+        private System.Windows.Forms.PictureBox writeStatusIcon;
+
+        private System.Windows.Forms.Label lblWriteStatus;
+
+
     }
 }
 

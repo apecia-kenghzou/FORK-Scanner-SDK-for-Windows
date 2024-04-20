@@ -526,6 +526,7 @@ namespace Scanner_SDK_Sample_Application
                 return;
             }
 
+          
             if (overrideValues)
             {
                 CurrentFilterValue = Convert.ToInt32(binaryValue.Substring(EPC_HEADER_LENGTH, EPC_FILTER_LENGTH), 2);
@@ -544,7 +545,9 @@ namespace Scanner_SDK_Sample_Application
                 overrideValues = true;
             }
 
+            
             CurrentEPCsUPCPortionInBinary = binaryValue.Substring((EPC_HEADER_LENGTH + EPC_FILTER_LENGTH + EPC_PARTITION_LENGTH), EPC_PREFIX_REFERENCE_LENGTH);
+            
             if (overrideSerial)
             {
                 CurrentSerialNumber = Convert.ToInt64(binaryValue.Substring((binaryValue.Length - EPC_SERIAL_NUMBER_LENGTH), EPC_SERIAL_NUMBER_LENGTH), 2);

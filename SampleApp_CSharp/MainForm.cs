@@ -97,7 +97,21 @@ namespace Scanner_SDK_Sample_Application
             cmbScannerType.SelectedIndex = 0;
             InitISO_15434_tab();
 
+            tabCtrl.TabPages.Remove(tabBarcode);
+            tabCtrl.TabPages.Remove(tabImgVdo);
+            tabCtrl.TabPages.Remove(tabISO15434);
+            tabCtrl.TabPages.Remove(tabScnAction);
+            tabCtrl.TabPages.Remove(tabRsm);
+            tabCtrl.TabPages.Remove(tabConfig);
+            tabCtrl.TabPages.Remove(tabScan2Connect);
+            tabCtrl.TabPages.Remove(tabMisc);
+            tabCtrl.TabPages.Remove(tabScale);
+            tabCtrl.TabPages.Remove(tabXml);
             tabCtrl.TabPages.Remove(tabSSW);
+            performGetScanner();
+            //initMode();
+
+
         }
 
         private void OnParameterBarcodeEvent(short eventType, int size, short imageFormat, ref object sfImageData, ref string pData)
@@ -675,7 +689,8 @@ namespace Scanner_SDK_Sample_Application
 
         private void btnGetScanners_Click(object sender, EventArgs e)
         {
-            performGetScanner();
+            //performGetScanner();
+           // initMode();
         }
 
         private void performGetScanner()
@@ -685,6 +700,7 @@ namespace Scanner_SDK_Sample_Application
             registerForEvents();
             ShowScanners();
             GetPairingBarcode();
+       
         }
 
         private void SetControlsForScannerSelection(bool bEnable)
@@ -1325,6 +1341,27 @@ namespace Scanner_SDK_Sample_Application
 
             return strScannerID;
         }
+        private void initMode()
+        {
+            string inXml = "<inArgs>" +
+                                    GetOnlyScannerIDXml() +
+                                    "<cmdArgs>" +
+                                    "<arg-string>XUA-45001-9</arg-string>" +
+                                    "<arg-bool>TRUE</arg-bool>" +
+                                    "<arg-bool>TRUE</arg-bool>" +
+                                    "</cmdArgs>" +
+                                    "</inArgs>";
+            int opCode = DEVICE_SWITCH_HOST_MODE;
+            string scnrMode = null;
+            // lstvScanners.Items[combSlcrScnr.SelectedIndex].Selected = true;
+            System.Diagnostics.Debug.WriteLine(lstvScanners.Items[0]);
+            scnrMode =  lstvScanners.SelectedItems[0].SubItems[1].Text;
+            if ("USB-CDC Serial Emulation" == scnrMode || "USB-SSI over CDC" == scnrMode)
+                opCode = SWITCH_CDC_DEVICES;
+            string outXml = "";
+            int status = STATUS_FALSE;
+            ExecCmd(opCode, ref inXml, out outXml, out status);
+        }
 
         private void btnSetReport_Click(object sender, EventArgs e)
         {
@@ -1477,6 +1514,7 @@ namespace Scanner_SDK_Sample_Application
                     btnGetScanners.Text = STR_REFRESH;
                 }
             }
+            
         }
 
         /// <summary>
@@ -1850,12 +1888,12 @@ namespace Scanner_SDK_Sample_Application
                 {
                     tabCtrl.Invoke(new MethodInvoker(delegate
                     {
-                        tabCtrl.TabPages.Add(tabSSW);
+                       // tabCtrl.TabPages.Add(tabSSW);
                     }));
                 }
                 else
                 {
-                    tabCtrl.TabPages.Add(tabSSW);
+                  //  tabCtrl.TabPages.Add(tabSSW);
                 }                
             }
 
@@ -1876,6 +1914,7 @@ namespace Scanner_SDK_Sample_Application
                 m_bIgnoreIndexChange = false;
             }
             UpdateScannerCountLabels();
+          
         }
 
         private void InitScannersCount()

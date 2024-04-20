@@ -315,32 +315,96 @@ namespace Scanner_SDK_Sample_Application
                 strData += ((char)Convert.ToInt32(number, 16)).ToString();
             }
 
-            if (txtBarcodeLbl.InvokeRequired)
+            /**if (txtBarcodeLbl.InvokeRequired)
             {
                 txtBarcodeLbl.Invoke(new MethodInvoker(delegate
                 {
                     txtBarcodeLbl.Clear();
                     System.Diagnostics.Debug.WriteLine(strData);
-                    txtBarcodeLbl.Text = strData;
+                    txtBarcodeLbl.Text = PNRExtract(strData);
                   
 
                 }));
-            }
+            }**/
 
+            System.Diagnostics.Debug.WriteLine(GetSymbology((int)Convert.ToInt32(symbology)));
             if (txtSyblogy.InvokeRequired)
             {
                 txtSyblogy.Invoke(new MethodInvoker(delegate
                 {
                     txtSyblogy.Text = GetSymbology((int)Convert.ToInt32(symbology));
+                   
                 }));
             }
-            if (txtSyblogy.Text== "PDF-417")
+            if (GetSymbology((int)Convert.ToInt32(symbology)) == "PDF-417")
             {
                 tempbarcode = strData;
+                if (txtPNRLbl.InvokeRequired)
+                {
+                    txtPNRLbl.Invoke(new MethodInvoker(delegate
+                    {
+                        txtPNRLbl.Clear();
+                        System.Diagnostics.Debug.WriteLine(strData);
+                        txtPNRLbl.Text = PNRExtract(strData);
+
+
+                    }));
+                }
+                if (txtFLIGHTLbl.InvokeRequired)
+                {
+                    txtFLIGHTLbl.Invoke(new MethodInvoker(delegate
+                    {
+                        txtFLIGHTLbl.Clear();
+                        System.Diagnostics.Debug.WriteLine(strData);
+                        txtFLIGHTLbl.Text = FlightExtract(strData);
+
+
+                    }));
+                }
             }
         }
 
+        private void SetWriteStatusIcon(CommandStatus status)
+        {
+            Bitmap icon = null;
+            switch (status)
+            {
+                case CommandStatus.Failed:
+                    icon = Properties.Resources.icon_error;
+                    break;
+                case CommandStatus.Success:
+                    icon = Properties.Resources.icon_success;
+                    break;
+            }
 
+            if (writeStatusIcon.InvokeRequired)
+            {
+                writeStatusIcon.Invoke(new MethodInvoker(delegate
+                {
+                    if (icon == null)
+                    {
+                        writeStatusIcon.Visible = false;
+                    }
+                    else
+                    {
+                        writeStatusIcon.Visible = true;
+                        writeStatusIcon.Image = icon;
+                    }
+                }));
+            }
+            else
+            {
+                if (icon == null)
+                {
+                    writeStatusIcon.Visible = false;
+                }
+                else
+                {
+                    writeStatusIcon.Visible = true;
+                    writeStatusIcon.Image = icon;
+                }
+            }
+        }
         /// <summary>
         /// BarcodeEvent received
         /// </summary>
@@ -355,7 +419,9 @@ namespace Scanner_SDK_Sample_Application
                 UpdateResults("Barcode Event fired");
                 ShowBarcodeLabel(tmpScanData);
 
-                if(txtBarcode.InvokeRequired)
+                System.Diagnostics.Debug.WriteLine(IndentXmlString(tmpScanData));
+
+                if (txtBarcode.InvokeRequired)
                 {
                     txtBarcode.Invoke(new MethodInvoker(delegate
                     {
@@ -368,19 +434,23 @@ namespace Scanner_SDK_Sample_Application
                 }
                 if (GetScanDataType(tmpScanData) == ST_EPC_RAW)
                 {
+                  
                     currentEpcId = GetScanDataLabel(tmpScanData);
                     currentEpcId = GetReadableScanDataLabel(currentEpcId);
                     
-                    string newepc = BoardingPassMassager(tempbarcode); 
+                    string newepc = StringToHex(txtPNRLbl.Text + txtFLIGHTLbl.Text);
+                         
                     System.Diagnostics.Debug.WriteLine(currentEpcId);
                     System.Diagnostics.Debug.WriteLine(newepc);
                     var status = WriteTag(currentEpcId, RfidBank.Epc, newepc, 2, "00");
                     if (status == STATUS_SUCCESS)
                     {
                         System.Diagnostics.Debug.WriteLine("WRITE SUCCESS");
+                        SetWriteStatusIcon(CommandStatus.Success);
                     }
                     else
                     {
+                        SetWriteStatusIcon(CommandStatus.Failed);
                         System.Diagnostics.Debug.WriteLine("WRITE FAIL");
                     }
                     //SetTextboxText(txtEpcId, currentEpcId);
@@ -439,6 +509,34 @@ namespace Scanner_SDK_Sample_Application
             string result = StringToHex(ss_pnr + "" + flight_no);
             System.Diagnostics.Debug.WriteLine(result);
             return result;
+        }
+        private static string PNRExtract(string s)
+        {
+
+            string ss_pnr = s.Substring(23, 6);
+            System.Diagnostics.Debug.WriteLine(ss_pnr);
+    
+            return ss_pnr;
+        }
+        private static string FlightExtract(string s)
+        {
+       
+            string ss_flight = s.Substring(30, 8);
+            System.Diagnostics.Debug.WriteLine(ss_flight);
+            string ss_no = s.Substring(39, 4);
+            //  string ss_date = s.Substring(44, 12);
+            // string date = null;
+            // int currentYear = DateTime.Now.Year;
+            // date = DecodeJulianDate(currentYear, int.Parse(ss_date.Substring(0, 3)));
+            // string seats = ss_date.Substring(4, 4);
+            //string seq = ss_date.Substring(8, 4);
+            //string[] name_part = ss_name.Split('/');
+            // string origin = ss_flight.Substring(0, 3);
+            // string dest = ss_flight.Substring(3, 3);
+            string flight_no = ss_flight.Substring(ss_flight.Length - 2) + ss_no;
+            System.Diagnostics.Debug.WriteLine(flight_no);
+
+            return flight_no;
         }
         public static string StringToHex(string input)
         {

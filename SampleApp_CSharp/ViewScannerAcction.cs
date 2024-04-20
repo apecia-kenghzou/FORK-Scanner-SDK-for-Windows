@@ -336,6 +336,7 @@ namespace Scanner_SDK_Sample_Application
                     opCode = SWITCH_CDC_DEVICES;
                 string outXml = "";
                 int status = STATUS_FALSE;
+                System.Diagnostics.Debug.WriteLine(scnrMode);
                 ExecCmd(opCode, ref inXml, out outXml, out status);
                 DisplayResult(status, "DEVICE_SWITCH_HOST_MODE");
             }
@@ -344,6 +345,7 @@ namespace Scanner_SDK_Sample_Application
                 UpdateResults("");
             }
         }
+
 
         private void PerformCDCSwitchModeClick(object sender, EventArgs e)
         {
